@@ -1,0 +1,3 @@
+[submodule "crosscompile-i686-elf"]
+	path = crosscompile-i686-elf
+	url = https://github.com/jornedesmedt/crosscompile-i686-elf
