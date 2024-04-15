@@ -1,10 +1,21 @@
 BUILDDIR=build
 SRCDIR=src
+
+# for GCC build
 GCCNAME=gcc-13.2.0
 GCCURL=https://ftp.gnu.org/gnu/gcc/$(GCCNAME)/$(GCCNAME).tar.gz
 GCCDIR=$(BUILDDIR)/$(GCCNAME)
 MAKE_FLAGS=-j$(shell nproc)
-CC=$(BUILDDIR)/$(GCCNAME)-build/gcc/xgcc
+
+# for kernel build
+CC=$(BUILDDIR)/$(GCCNAME)-build/gcc/gcc
+ASM=nasm
+LD=ld
+LDFLAGS=-A i686 -b elf
+
+OUT=$(BUILDDIR)/kernel/canoos.kernel
+
+build-gcc: setup
 
 setup: $(GCCDIR)
 	# building gcc (FIXME: gpg signature is not being verified)
@@ -21,4 +32,4 @@ $(GCCDIR):
 destroy:
 	rm -rf $(BUILDDIR)
 
-.PHONY: setup destroy
+.PHONY: build-gcc setup destroy
