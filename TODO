@@ -1,10 +1,18 @@
 
+* - all done
+/ - maybe done
+  - still needs work
+
+- BUILDING -
+[] Makefile
+[] Docker system for using the cross-compiler
+
 - OTHER (ASM) -
-[] boot loader entry (NASM)
-[] load into kernel
+[/] boot loader entry (NASM)
+[/] load into kernel
 
 - KERNEL (C) -
-[] kernel main
+[/] kernel main
 [] tty/screen buffering
 [] some sort of print function
 [] simple output
