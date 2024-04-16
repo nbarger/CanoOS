@@ -1,55 +1,40 @@
-BUILDDIR=build
-SRCDIR=src
-OBJDIR=build/obj
-ARCHDIR=src/arch/i686
+BUILDDIR := build
+SRCDIR := src
+OBJDIR := $(BUILDDIR)/obj
+ARCHDIR := $(SRCDIR)/arch/i686
 
-# for GCC build
-GCCNAME=gcc-13.2.0
-GCCURL=https://ftp.gnu.org/gnu/gcc/$(GCCNAME)/$(GCCNAME).tar.gz
-GCCDIR=$(BUILDDIR)/$(GCCNAME)
-MAKE_FLAGS=-j$(shell nproc)
+CC := i686-elf-gcc
+CFLAGS := -O2 -g -ffreestanding -Wall -Wextra -m32
+LDFLAGS := -T $(ARCHDIR)/linker.ld
+AS := nasm
+LIBS := -nostdlib -lgcc
+BINARY := $(BUILDDIR)/canoos.kernel
 
-# for kernel build
-CC=$(BUILDDIR)/$(GCCNAME)-build/gcc/gcc
-CFLAGS=-O2 -g -ffreestanding -Wall -Wextra
-ASM=nasm
-LIBS=-nostdlib -lk -lgcc
+KERNEL_SRC := $(wildcard $(SRCDIR)/kernel/*.c)
+KERNEL_OBJ := $(patsubst $(SRCDIR)/kernel/%.c,$(OBJDIR)/%.o,$(KERNEL_SRC))
 
-SRC=\
-    $(SRCDIR)/kernel/kernel.c\
+ARCH_SRC := $(wildcard $(ARCHDIR)/*.asm)
+ARCH_OBJ := $(patsubst $(ARCHDIR)/%.asm,$(OBJDIR)/%.o,$(ARCH_SRC))
 
-OBJ=\
-    $(OBJDIR)/kernel/kernel.o\
+canoos-all: build
 
-OUT=$(BUILDDIR)/kernel/canoos.kernel
+build: $(ARCH_OBJ) $(KERNEL_OBJ) link
 
-canoos-all: build-kernel
+$(ARCH_OBJ): $(OBJDIR)/%.o : $(ARCHDIR)/%.asm
+	mkdir -p $(dir $@)
+	$(AS) -felf32 $(patsubst $(OBJDIR)/%.o,$(ARCHDIR)/%.asm,$@) -o $@
 
-build-kernel: $(OUT)
+$(KERNEL_OBJ): $(OBJDIR)/%.o : $(SRCDIR)/kernel/%.c
+	mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c $(patsubst $(OBJDIR)/%.o,$(SRCDIR)/kernel/%.c,$@) -o $@
 
-$(OUT): $(OBJ) $(ARCHDIR)/linker.ld
-	mkdir -p $(BUILDDIR)/kernel-build $(OBJ) $(LIBS)
-	$(CC) -T $(ARCHDIR)/linker.ld -o $@ $(CFLAGS)
-
-$(OBJ): $(SRC)
-	mkdir -p $(BUILDDIR)/kernel-build/obj
-
-
-build-gcc: setup-gcc
-
-setup-gcc: $(GCCDIR)
-	# building gcc (FIXME: gpg signature is not being verified)
-	mkdir -p $(GCCDIR)-build
-	cd $(GCCDIR)-build && ../$(GCCNAME)/configure --target=i686-elf --disable-nls --enable-languages=c,c++ --without-headers
-	make -C $(GCCDIR)-build all-gcc $(MAKE_FLAGS)
-
-$(GCCDIR):
-	mkdir -p $(BUILDDIR)
-	# downloading gcc
-	curl -o $(GCCDIR).tar.gz $(GCCURL)
-	tar -xf $(GCCDIR).tar.gz -C $(BUILDDIR)
+link:
+	$(CC) $(LDFLAGS) $(ARCH_OBJ) $(KERNEL_OBJ) -o $(BINARY) $(LIBS)
 
 destroy:
 	rm -rf $(BUILDDIR)
 
-.PHONY: canoos-all build-gcc setup-gcc destroy
+clean:
+	rm -rf $(OBJDIR)
+
+.PHONY: canoos-all build destroy clean
