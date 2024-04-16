@@ -1,5 +1,7 @@
 BUILDDIR=build
 SRCDIR=src
+OBJDIR=build/obj
+ARCHDIR=src/arch/i686
 
 # for GCC build
 GCCNAME=gcc-13.2.0
@@ -9,15 +11,33 @@ MAKE_FLAGS=-j$(shell nproc)
 
 # for kernel build
 CC=$(BUILDDIR)/$(GCCNAME)-build/gcc/gcc
+CFLAGS=-O2 -g -ffreestanding -Wall -Wextra
 ASM=nasm
-LD=ld
-LDFLAGS=-A i686 -b elf
+LIBS=-nostdlib -lk -lgcc
+
+SRC=\
+    $(SRCDIR)/kernel/kernel.c\
+
+OBJ=\
+    $(OBJDIR)/kernel/kernel.o\
 
 OUT=$(BUILDDIR)/kernel/canoos.kernel
 
-build-gcc: setup
+canoos-all: build-kernel
 
-setup: $(GCCDIR)
+build-kernel: $(OUT)
+
+$(OUT): $(OBJ) $(ARCHDIR)/linker.ld
+	mkdir -p $(BUILDDIR)/kernel-build $(OBJ) $(LIBS)
+	$(CC) -T $(ARCHDIR)/linker.ld -o $@ $(CFLAGS)
+
+$(OBJ): $(SRC)
+	mkdir -p $(BUILDDIR)/kernel-build/obj
+
+
+build-gcc: setup-gcc
+
+setup-gcc: $(GCCDIR)
 	# building gcc (FIXME: gpg signature is not being verified)
 	mkdir -p $(GCCDIR)-build
 	cd $(GCCDIR)-build && ../$(GCCNAME)/configure --target=i686-elf --disable-nls --enable-languages=c,c++ --without-headers
@@ -32,4 +52,4 @@ $(GCCDIR):
 destroy:
 	rm -rf $(BUILDDIR)
 
-.PHONY: build-gcc setup destroy
+.PHONY: canoos-all build-gcc setup-gcc destroy
