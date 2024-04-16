@@ -6,7 +6,28 @@ As you can see, this is an attempt to create an entire domination over the softw
 
 ## Build
 
-Currently, the only way to build is to use the build.sh script. Makefile is still a work in progress. Make sure you have i686-elf-gcc and i686-elf-binutils, as well as nasm, before building.
+You can build CanoOS using Make.
+The Makefile depends on the following tools:
+- nasm
+- i686-elf-gcc
+- i686-elf-binutils
+
+You can either install the i686-elf versions of gcc and binutils using your favourite package manager or build them from source using the [setup.sh](https://github.com/Garihosu/CanoOS/blob/main/setup.sh) script.
+
+The setup script will download and build both gcc and binutils using this command:
+```sh
+./setup.sh -i
+```
+
+The following command will tell the setup script to add i686-gcc and i686-binutils to your PATH by making a new entry in your `~/.bashrc` file:
+```sh
+./setup.sh -p
+```
+
+Building CanoOS:
+```sh
+make
+```
 
 ## Contributing
 
