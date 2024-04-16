@@ -41,5 +41,5 @@ _start:
 	cli
 .hang:	hlt
 	jmp .hang
-.end
+.end:
 
