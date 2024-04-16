@@ -1,5 +1,5 @@
 
-#include "drivers/tty.c"
+#include "drivers/tty.h"
 
 void kernel_main(void)
 {
