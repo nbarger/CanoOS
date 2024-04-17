@@ -1,5 +1,8 @@
 # CanoOS
 
+![CanoOS icon](CanoOS.jpg) \
+Icon made by [LocalTexan](https://github.com/LocalTexan)
+
 CanoOS is a Unix-inspired operating system that makes use of the set of software created by @CobbCoding1. The OS intends to be packaged with TIM as a environment for running programs, CanoScript for writing programs, and Cano as the text editor. The shell interface will be called Canosh, and will be written in CanoScript.
 
 As you can see, this is an attempt to create an entire domination over the software industry using the label "Cano."
