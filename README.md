@@ -30,6 +30,11 @@ Building CanoOS:
 make
 ```
 
+Running using the Makefile:
+```sh
+make run
+```
+
 ## Contributing
 
 For contributing, read [CONTRIBUTING.md](https://github.com/Garihosu/CanoOS/blob/main/CONTRIBUTING.md) (as you probably know already).

@@ -32,7 +32,7 @@ $(KERNEL_OBJ): $(OBJDIR)/%.o : $(SRCDIR)/kernel/%.c
 link:
 	$(CC) $(LDFLAGS) $(ARCH_OBJ) $(KERNEL_OBJ) -o $(BINARY) $(LIBS)
 
-run:
+run: build
 	qemu-system-i386 -kernel build/canoos.kernel
 
 destroy:
