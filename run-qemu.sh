@@ -7,4 +7,3 @@ if ! [ -x "$(command -v qemu-system-i386)" ]; then
 fi
 
 qemu-system-i386 -kernel build/kernel/canoos.kernel
-

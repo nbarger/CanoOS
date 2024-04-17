@@ -11,6 +11,7 @@ The Makefile depends on the following tools:
 - nasm
 - i686-elf-gcc
 - i686-elf-binutils
+- qemu for i386
 
 You can either install the i686-elf versions of gcc and binutils using your favourite package manager or build them from source using the [setup.sh](https://github.com/Garihosu/CanoOS/blob/main/setup.sh) script.
 
@@ -27,6 +28,11 @@ The following command will tell the setup script to add i686-gcc and i686-binuti
 Building CanoOS:
 ```sh
 make
+```
+
+Running using the Makefile:
+```sh
+make run
 ```
 
 ## Contributing
