@@ -4,13 +4,14 @@ OBJDIR := $(BUILDDIR)/obj
 ARCHDIR := $(SRCDIR)/arch/i686
 
 CC := i686-elf-gcc
-CFLAGS := -O2 -g -ffreestanding -Wall -Wextra -m32
+CFLAGS := -O2 -g -ffreestanding -Wall -Wextra -m32 -Iinclude/kernel
 LDFLAGS := -T $(ARCHDIR)/linker.ld
 AS := nasm
 LIBS := -nostdlib -lgcc
 BINARY := $(BUILDDIR)/canoos.kernel
 
-KERNEL_SRC := $(wildcard $(SRCDIR)/kernel/*.c)
+KERNEL_SRC := $(wildcard $(SRCDIR)/kernel/*/*.c)
+KERNEL_SRC += $(wildcard $(SRCDIR)/kernel/*.c)
 KERNEL_OBJ := $(patsubst $(SRCDIR)/kernel/%.c,$(OBJDIR)/%.o,$(KERNEL_SRC))
 
 ARCH_SRC := $(wildcard $(ARCHDIR)/*.asm)
@@ -31,10 +32,13 @@ $(KERNEL_OBJ): $(OBJDIR)/%.o : $(SRCDIR)/kernel/%.c
 link:
 	$(CC) $(LDFLAGS) $(ARCH_OBJ) $(KERNEL_OBJ) -o $(BINARY) $(LIBS)
 
+run:
+	qemu-system-i386 -kernel build/canoos.kernel
+
 destroy:
 	rm -rf $(BUILDDIR)
 
 clean:
 	rm -rf $(OBJDIR)
 
-.PHONY: canoos-all build destroy clean
+.PHONY: canoos-all build link run destroy clean

@@ -9,9 +9,7 @@ BINUTILSNAME="binutils-2.42"
 BINUTILSURL="https://ftp.gnu.org/gnu/binutils/$BINUTILSNAME.tar.gz"
 BINUTILSDIR="$BUILDDIR/$BINUTILSNAME"
 
-MAKE_FLAGS=-j$(nproc)
-
-function download_build() {  
+function download_build() {
     set -xe
     
     mkdir -p $BUILDDIR
@@ -24,8 +22,8 @@ function download_build() {
     mkdir -p $BINUTILSDIR-build
     cd $BINUTILSDIR-build
     ../$BINUTILSNAME/configure --target=i686-elf --prefix="$(pwd)" --with-sysroot --disable-nls --disable-werror
-    make $MAKE_FLAGS
-    make install $MAKE_FLAGS
+    make
+    make install
 
     cd ../../../
 
@@ -40,10 +38,10 @@ function download_build() {
     mkdir -p $GCCDIR-build
     cd $GCCDIR-build
     ../$GCCNAME/configure --target=i686-elf --prefix="$(pwd)" --disable-nls --enable-languages=c,c++ --without-headers --disable-multilib --disable-build-format-warnings
-    make all-gcc $MAKE_FLAGS
-    make all-target-libgcc $MAKE_FLAGS
-    make install-gcc $MAKE_FLAGS
-    make install-target-libgcc $MAKE_FLAGS
+    make all-gcc
+    make all-target-libgcc
+    make install-gcc
+    make install-target-libgcc
 
     cd ../../../
 
