@@ -1,0 +1,5 @@
+
+global outb
+
+outb:
+	

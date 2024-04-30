@@ -5,9 +5,9 @@ mkdir -p build/kernel/obj
 mkdir -p build/kernel/obj/drivers
 
 # compile
-i686-elf-gcc -c src/kernel/kernel.c -o build/kernel/obj/kernel.o -Iinclude/kernel -ffreestanding -O2 -Wall -Wextra
-i686-elf-gcc -c src/kernel/drivers/tty.c -o build/kernel/obj/drivers/tty.o -Iinclude/kernel -ffreestanding -O2 -Wall -Wextra
-i686-elf-gcc -c src/kernel/drivers/keyboard.c -o build/kernel/obj/drivers/keyboard.o -Iinclude/kernel -ffreestanding -O2 -Wall -Wextra
+i686-elf-gcc -c src/kernel/kernel.c -o build/kernel/obj/kernel.o -ffreestanding -O2 -Wall -Wextra
+i686-elf-gcc -c src/kernel/drivers/tty.c -o build/kernel/obj/drivers/tty.o -ffreestanding -O2 -Wall -Wextra
+i686-elf-gcc -c src/kernel/drivers/keyboard.c -o build/kernel/obj/drivers/keyboard.o -ffreestanding -O2 -Wall -Wextra
 nasm -felf32 src/arch/i686/boot.asm -o build/kernel/obj/boot.o
 
 # link
